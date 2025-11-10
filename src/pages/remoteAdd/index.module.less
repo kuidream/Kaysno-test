@@ -1,0 +1,351 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  // position: absolute;
+  // width: 100%;
+  // height: 100%;
+  flex: 1;
+  height: 100vh;
+  background-color: var(--panel-bg-muted);
+  width: 750rpx;
+  box-sizing: border-box;
+}
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .navBarIcon {
+    width: 48rpx;
+    height: 48rpx;
+  }
+}
+.bg {
+  position: absolute;
+  top: 0rpx;
+  width: 750rpx;
+  height: 100vh;
+  z-index: -1;
+}
+
+.settingbg {
+  position: absolute;
+  top: 0rpx;
+  width: 750rpx;
+  height: 330rpx;
+  z-index: -1;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.containBox {
+  width: 686rpx;
+  height: 360rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  margin-top: 24rpx;
+}
+
+.selBox {
+  width: 750rpx;
+  height: 330rpx;
+  box-sizing: border-box;
+  padding: 0rpx 48rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selectedCotent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.selectTri {
+  width: 28rpx;
+  height: 14rpx;
+  margin-top: 16rpx;
+}
+
+.textNoSelected {
+  font-size: 28rpx;
+  color: #cbcbcb;
+}
+
+.textSelected {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.textBox {
+  width: 146rpx;
+  height: 88rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.addBtns {
+  width: 750rpx;
+  height: 116rpx;
+  border-radius: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--panel-card-bg);
+  border: 2rpx solid #18b3c4;
+  position: absolute;
+  bottom: 44rpx;
+}
+
+.numberText {
+  font-size: 64rpx;
+  color: var(--panel-text-primary);
+  font-weight: 600;
+}
+
+.numberBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  min-width: 80rpx;
+}
+
+.numberTips {
+  font-size: 36rpx;
+  color: var(--panel-text-tertiary);
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+
+.addText {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--panel-theme-color);
+}
+
+.tips {
+  font-size: 32rpx;
+  color: var(--panel-text-tertiary);
+  margin-top: 48rpx;
+}
+
+.countdownBox {
+  width: 750rpx;
+  margin-top: 252rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.countdownNoBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 134rpx;
+}
+
+.noCountdownTitle {
+  font-size: 32rpx;
+  color: #444444;
+}
+
+.remoteList {
+  width: 750rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.remoteItem {
+  width: 686rpx;
+  height: 108rpx;
+  box-sizing: border-box;
+  padding: 0rpx 38rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--panel-card-bg);
+  margin-top: 24rpx;
+  border-radius: 12rpx;
+}
+
+.remoteItemMain {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rightArrow {
+  width: 18rpx;
+  height: 32rpx;
+  margin-left: 16rpx;
+}
+
+.delIcon {
+  width: 56rpx;
+  height: 56rpx;
+}
+
+.pickerBox {
+  width: 343rpx;
+}
+
+.popBox {
+  width: 750rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.titlePopBox {
+  width: 676rpx;
+  height: 106rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2rpx solid #eaeaea;
+  margin-bottom: 52rpx;
+}
+
+.titlePopRepBox {
+  width: 676rpx;
+  height: 106rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.popItem {
+  width: 676rpx;
+  height: 92rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+  border-top: #f3f3f3 dashed 2rpx;
+  position: relative;
+}
+
+.rightSelected {
+  width: 32rpx;
+  height: 32rpx;
+  position: absolute;
+  right: 24rpx;
+}
+
+.popBtns {
+  width: 750rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-top: 10rpx solid #d9d9d9;
+  margin-top: 72rpx;
+}
+
+.popRepBtns {
+  width: 750rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-top: 10rpx solid #d9d9d9;
+  margin-top: 16rpx;
+}
+
+.popBtn {
+  width: 50%;
+  height: 148rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.popAct {
+  background-color: var(--panel-bg);
+}
+
+.textDot16 {
+  font-weight: 600;
+  font-size: 36rpx;
+  color: #444444;
+}
+
+.textDot18 {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #444444;
+}
+
+.textDot19 {
+  font-size: 32rpx;
+  color: #878787;
+}
+
+.swpCell {
+  display: flex;
+  width: 130rpx;
+  height: 100%;
+  font-size: 30rpx;
+  color: #fff;
+  background-color: #ee0a24;
+  justify-content: center;
+  align-items: center;
+  margin-left: 16rpx;
+}
+
+.editTimer {
+  width: 30rpx;
+  height: 28rpx;
+  margin-left: 20rpx;
+}
+
+.box {
+  padding: 32rpx 24rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialogContent {
+  width: 100%;
+  margin-top: 60rpx;
+}
+
+.input {
+  width: 100%;
+  font-size: 32rpx;
+  color: #444444;
+  font-weight: 600;
+  border: 0;
+}

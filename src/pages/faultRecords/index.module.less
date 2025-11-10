@@ -1,0 +1,121 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 750rpx;
+  min-height: 100vh;
+  background: #f7f9fb;
+}
+
+.topbar {
+  position: relative;
+  width: 750rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+}
+
+.backIcon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-left: 24rpx;
+}
+
+.topbarTitle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32rpx;
+  color: #333333;
+}
+
+.list {
+  margin-top: 56rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.emptyImg {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.emptyText {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.item {
+  width: 702rpx;
+  min-height: 112rpx;
+  padding: 0 24rpx;
+  margin-bottom: 24rpx;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+  border-radius: 25rpx;
+}
+
+.valueBox {
+  max-width: 250rpx;
+  word-wrap: break-word;    /* 旧写法，兼容性好 */
+  word-break: break-all;    /* 强制换行，适合长单词或数字 */
+  white-space: normal;      /* 默认自动换行 */
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.box {
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 16rpx;
+  background: rgba(119, 19, 221, 0.05);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boxText {
+  font-size: 24rpx;
+  color: #7713dd;
+}
+
+.title {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.rightText {
+  font-size: 28rpx;
+  color: #999999;
+  margin-right: 12rpx;
+}
+
+.rightIcon {
+  width: 40rpx;
+  height: 40rpx;
+}

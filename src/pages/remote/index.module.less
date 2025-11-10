@@ -1,0 +1,374 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  // position: absolute;;
+  // height: 100%;
+  flex: 1;
+  height: 100vh;
+  background-color: var(--panel-bg-muted);
+  width: 750rpx;
+  box-sizing: border-box;
+}
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .navBarIcon {
+    width: 48rpx;
+    height: 48rpx;
+  }
+}
+.bg {
+  position: absolute;
+  top: 0rpx;
+  width: 750rpx;
+  height: 100vh;
+  z-index: -1;
+}
+
+.editTimerBox {
+  padding: 0rpx 20rpx;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.settingbg {
+  position: absolute;
+  top: 0rpx;
+  width: 750rpx;
+  height: 330rpx;
+  z-index: -1;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.containBox {
+  width: 686rpx;
+  height: 360rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  margin-top: 24rpx;
+}
+
+.selBox {
+  width: 750rpx;
+  height: 330rpx;
+  box-sizing: border-box;
+  padding: 0rpx 48rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selectedCotent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.selectTri {
+  width: 28rpx;
+  height: 14rpx;
+  margin-top: 16rpx;
+}
+
+.textNoSelected {
+  font-size: 28rpx;
+  color: #cbcbcb;
+}
+
+.textSelected {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.textBox {
+  width: 146rpx;
+  height: 88rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+.bottomWrap {
+  bottom: 44rpx;
+  position: absolute;
+  width: 750rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.addBtns {
+  width: 686rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--panel-card-bg);
+  margin-bottom: 10rpx;
+}
+
+.addText {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--panel-theme-color);
+  margin-left: 20rpx;
+}
+.addDisable {
+  color: rgba(102, 109, 133, 0.32);
+}
+.addIcon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.delText {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--panel-text-secondary);
+  margin-left: 20rpx;
+}
+
+.delIcon {
+  width: 40rpx;
+  height: 42rpx;
+}
+
+.listBox {
+  width: 750rpx;
+  // margin-top: 140rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.listEmptyBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 134rpx;
+}
+
+.remoteTitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 600rpx;
+  font-size: 32rpx;
+  color: #444444;
+}
+
+.remoteList {
+  width: 750rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.remoteItem {
+  width: 686rpx;
+  height: 108rpx;
+  box-sizing: border-box;
+  padding: 0rpx 38rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--panel-card-bg);
+  margin-top: 24rpx;
+  border-radius: 12rpx;
+}
+
+.remoteItemMain {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overText {
+  display: flex;
+  max-width: 300rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rightArrow {
+  width: 18rpx;
+  height: 32rpx;
+  margin-left: 16rpx;
+}
+
+.delIcon {
+  width: 56rpx;
+  height: 56rpx;
+}
+
+.pickerBox {
+  width: 343rpx;
+}
+
+.popBox {
+  width: 750rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.titlePopBox {
+  width: 676rpx;
+  height: 106rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2rpx solid #eaeaea;
+  margin-bottom: 52rpx;
+}
+
+.titlePopRepBox {
+  width: 676rpx;
+  height: 106rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.popItem {
+  width: 676rpx;
+  height: 92rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+  border-top: #f3f3f3 dashed 2rpx;
+  position: relative;
+}
+
+.rightSelected {
+  width: 32rpx;
+  height: 32rpx;
+  position: absolute;
+  right: 24rpx;
+}
+
+.popBtns {
+  width: 750rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-top: 10rpx solid #d9d9d9;
+  margin-top: 72rpx;
+}
+
+.popRepBtns {
+  width: 750rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-top: 10rpx solid #d9d9d9;
+  margin-top: 16rpx;
+}
+
+.popBtn {
+  width: 50%;
+  height: 148rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.popAct {
+  background-color: #f3f3f3;
+}
+
+.textDot16 {
+  font-weight: 600;
+  font-size: 36rpx;
+  color: var(--panel-text-primary);
+}
+
+.textDot18 {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--panel-text-primary);
+}
+
+.textDot19 {
+  font-size: 32rpx;
+  color: var(--panel-text-tertiary);
+}
+
+.swpCell {
+  display: flex;
+  width: 130rpx;
+  height: 100%;
+  font-size: 30rpx;
+  color: #fff;
+  background-color: #ee0a24;
+  justify-content: center;
+  align-items: center;
+  margin-left: 16rpx;
+}
+
+.editTimer {
+  width: 30rpx;
+  height: 28rpx;
+}
+
+.box {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 32rpx 24rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialogContent {
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  font-size: 32rpx;
+  color: #444444;
+  height: 120rpx;
+  font-weight: 600;
+  border: 0;
+}
+
+.picker {
+  width: 100%;
+}

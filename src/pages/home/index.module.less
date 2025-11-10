@@ -1,0 +1,337 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #280A64 0%, #43179C 100%);
+}
+
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .navBarIcon {
+    width: 48rpx;
+    height: 48rpx;
+    filter: brightness(0) invert(1);
+  }
+}
+
+// Fault Alert Styles
+.faultAlert {
+  position: fixed;
+  top: 200rpx;
+  left: 32rpx;
+  right: 32rpx;
+  z-index: 1000;
+}
+
+.faultAlertContent {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
+  padding: 20rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+}
+
+
+.addIcon {
+  width: 64rpx;
+  height: 64rpx;
+}
+
+
+
+
+.faultText {
+  max-width: 542rpx;
+  display: flex;
+  white-space: normal;    // 允许换行
+  word-break: break-word; // 遇到长单词/长字符串也能断行
+  color: #333;
+  font-size: 28rpx;
+  flex: 1;
+}
+
+.faultCloseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faultCloseText {
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+// Temperature Control Styles
+.tempControlContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.tempCircle {
+  position: relative;
+  width: 600rpx;
+  height: 600rpx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.tempSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.tempThumb {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tempThumb:hover {
+  r: 15;
+}
+
+.tempCircleContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 564rpx;
+  height: 576rpx;
+  border-radius: 500rpx;
+  margin-bottom: 80rpx;
+  background: linear-gradient(180deg, rgba(82, 161, 244, 1) 0%, rgba(138, 38, 248, 1) 100%);
+}
+
+.textBox {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+  top: 200rpx;
+}
+
+.tempTopBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 40rpx;
+}
+
+.tempValueClickArea {
+  position: relative;
+  z-index: 21;
+  gap: 12rpx;
+  padding: 12rpx 32rpx 50rpx;
+  border-radius: 999rpx;
+  pointer-events: auto;
+}
+
+.targetTempValue {
+  color: #fff;
+  font-size: 88rpx;
+  font-weight: 600;
+}
+
+.driverIcon {
+  width: 314rpx;
+  height: 2rpx;
+  margin-bottom: 48rpx;
+}
+
+.targetTempTips {
+  display: block;
+  margin-top: 8rpx;
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: 600;
+}
+
+.targetTempLabel {
+  line-height: 42rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.currentTempValue {
+  line-height: 42rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+}
+
+.tempControls {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.tempBtn {
+  width: 88rpx;
+  height: 88rpx;
+  margin-bottom: 25rpx;
+  border-radius: 88rpx;
+  background: rgba(209, 212, 240, 0.56);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3rpx solid #9e91c9;
+  transition: all 0.2s ease;
+}
+
+.tempBtn:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.95);
+}
+
+.tempBtnText {
+  color: #fff;
+  font-size: 40rpx;
+  font-weight: bold;
+  line-height: 1;
+}
+
+// Mode Display
+.modeDisplay {
+  text-align: center;
+  height: 68rpx;
+  margin-bottom: 68rpx;
+}
+
+.modeText {
+  color: #fff;
+  font-size: 46rpx;
+  font-weight: 600;
+}
+
+// Bottom Tab Styles
+.tabWrap {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  height: 564rpx;
+}
+
+.tabBox {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  width: 100vw;
+  background-color:#f7f6fb;
+}
+
+.borRightBox {
+  width: 50%;
+  height: 24rpx;
+  background-color: #f7f6fb;
+}
+
+.statusBar {
+  width: 100%;
+  background-color: #f7f6fb;
+  position: fixed;
+  bottom: 0;
+  z-index: -1;
+}
+
+.faultIcon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.faultIcon2 {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 16rpx;
+}
+
+.tabItem {
+  height: 96rpx;
+  width: 96rpx;
+}
+
+.tabCenter {
+  width: 104rpx;
+  height: 104rpx;
+}
+
+.powerButton {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  background: #8A2BE2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 8rpx 24rpx rgba(138, 43, 226, 0.3);
+}
+
+.powerButtonOn {
+  background: #00C851;
+  box-shadow: 0 8rpx 24rpx rgba(0, 200, 81, 0.3);
+}
+
+.powerIcon {
+  width: 48rpx;
+  height: 48rpx;
+  filter: brightness(0) invert(1);
+}
+
+.tabText {
+  font-size: 32rpx;
+  color: #8A2BE2;
+  font-weight: bold;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  border: 3rpx solid #8A2BE2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8rpx;
+}
+
+.tabIcon {
+  width: 32rpx;
+  height: 32rpx;
+  filter: brightness(0);
+  opacity: 0.6;
+}
+
+.bottomBg {
+  position: absolute;
+  width: 100%;
+  height: 237rpx;
+  z-index: -1;
+  bottom: 10rpx;
+}

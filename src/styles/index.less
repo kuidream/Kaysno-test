@@ -1,0 +1,66 @@
+:root {
+  /* 首页样式 */
+  --index-main-bg: #ffffff; // 页面底色
+  --index-title-bg: #ffffff; // title背景
+  --index-title-color: #000000e5; // title字体色
+  --index-footer-bar-bg: #ffffff; // 底部操作栏底色
+  --index-icon-color: rgba(0, 0, 0, 0.5); // 图标颜色
+
+  /* 主题与通用色板 */
+  --panel-theme-color: #1b85f3; // 主题主色
+  --panel-danger-color: #ee0a24; // 危险色
+  --panel-bg: #f6f8fa; // 页面背景（常规）
+  --panel-bg-muted: #f0f6f9; // 页面背景（浅色）
+  --panel-card-bg: #ffffff; // 卡片/容器背景
+  --panel-border-color: #eaeaea; // 卡片分割线
+  --panel-control-mute: #666d85; // 次级描边/按钮边框
+
+  /* 文本色 */
+  --panel-text-primary: #1c1b1f; // 主要文字
+  --panel-text-secondary: #666d85; // 次级文字
+  --panel-text-tertiary: #969696; // 辅助文字
+  --panel-text-inactive: #bbbbbb; // 失活文字
+  --panel-text-inverse: #ffffff; // 反色文字
+  --panel-text-disabled: rgba(102, 109, 133, 0.32); // 禁用文字
+
+  /* 兼容旧变量命名（映射至新令牌） */
+  --panel-font-normal: var(--panel-text-primary);
+  --panel-font-light: var(--panel-text-secondary);
+  --panel-font-lighter: var(--panel-text-tertiary);
+
+  // 字体图标
+  .iconfont {
+    margin: 0 !important;
+  }
+}
+
+:root[theme='dark'] {
+  /* 首页样式 */
+  --index-main-bg: #000000; // 页面底色
+  --index-title-bg: #000000; // title背景
+  --index-title-color: #ffffff; // title字体色
+  --index-footer-bar-bg: #1a1919; // 底部操作栏底色
+  --index-icon-color: rgba(255, 255, 255, 0.5); // 图标颜色
+
+  /* 主题与通用色板（暗色） */
+  --panel-theme-color: #3d8bf2;
+  --panel-danger-color: #ff4d4f;
+  --panel-bg: #0f1113;
+  --panel-bg-muted: #14171a;
+  --panel-card-bg: #1b1f24;
+  --panel-border-color: #2a2f36;
+  --panel-control-mute: #8a8f9f;
+
+  /* 文本色（暗色） */
+  --panel-text-primary: #f5f5f6;
+  --panel-text-secondary: #b7bdc9;
+  --panel-text-tertiary: #8a8f9f;
+  --panel-text-inactive: #6b7280;
+  --panel-text-inverse: #ffffff;
+  --panel-text-disabled: rgba(183, 189, 201, 0.32);
+
+  /* 兼容旧变量命名（映射至新令牌） */
+  --panel-font-normal: var(--panel-text-primary);
+  --panel-font-light: var(--panel-text-secondary);
+  --panel-font-lighter: var(--panel-text-tertiary);
+}

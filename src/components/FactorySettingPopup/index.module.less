@@ -1,0 +1,83 @@
+
+.popup {
+  width: 701rpx;
+  height: 394rpx;
+  background: #fff;
+  border-radius: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  margin-top: 32rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  text-align: center;
+}
+
+.input {
+  width: 653rpx;
+  height: 96rpx;
+  background: #f2f2f2;
+  border-radius: 24rpx;
+  margin-top: 40rpx;
+  padding-left: 24rpx;
+  box-sizing: border-box;
+  line-height: 96rpx;
+  color: #333333;
+}
+
+.btnRow {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  border-top: 2rpx solid #d9d9d9;
+}
+
+.btn {
+  flex: 1;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.loading {
+  width: 32rpx;
+  height: 32rpx;
+  border: 4rpx solid rgba(0, 0, 0, 0.2);
+  border-top-color: #333333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.btn:first-child {
+  border-right: 2rpx solid #d9d9d9;
+}
+
+.cancelText {
+  color: #999999;
+  font-size: 32rpx;
+}
+
+.confirmText {
+  color: #333333;
+  font-size: 32rpx;
+}
+
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
