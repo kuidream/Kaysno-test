@@ -1,20 +1,57 @@
 ﻿.topBar {
   display: flex;
   align-items: center;
-  height: 168rpx;
-  padding-left: 32rpx;
-  background: transparent;
+  height: 128rpx;
+  padding: 0 24rpx;
+  background: #F37C1C; /* 橙色标题栏 */
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.navIcon {
+  width: 48rpx;
+  height: 48rpx;
+  filter: brightness(0) invert(1);
 }
 
 .title {
+  flex: 1;
+  text-align: center;
   color: #fff;
   font-size: 36rpx;
   font-weight: 600;
 }
 
+.right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
 .editIcon {
-  margin-left: auto;
-  padding: 24rpx 32rpx;
+  padding: 16rpx 24rpx;
   color: #fff;
-  font-size: 36rpx;
+  font-size: 32rpx;
+}
+
+.powerBtn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 28rpx;
+  border: 2rpx solid rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.powerBtnOn {
+  background: rgba(255,255,255,0.15);
+}
+
+.powerIcon {
+  color: #fff;
+  font-size: 32rpx;
 }

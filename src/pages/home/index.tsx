@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { View, Text, Image, navigateTo, usePageEvent, showToast, getDevInfo } from '@ray-js/ray';
+import { View, Text, Image, navigateTo, usePageEvent, showToast, getDevInfo, hideMenuButton } from '@ray-js/ray';
 import RayCircleProgress from '@ray-js/circle-progress';
 import { useActions, useDevice, useProps } from '@ray-js/panel-sdk';
 import { Dialog, DialogInstance } from '@ray-js/smart-ui';
@@ -27,7 +27,7 @@ export function Home() {
   const powerSwitch = useProps(props => props[powerCode]) as boolean;
   const roomHum = useProps(props => props[getHumCode]) as number; // 0-99
   const targetHum = useProps(props => props[humidityCode]) as number; // 30-80
-  const windspeed = useProps(props => props[windspeedCode]) as string;
+  const windspeed = useProps(props => props[windspeedCode]) as number;
   const swing = useProps(props => props[swingCode]) as boolean;
   const faultValue = useProps(props => props[faultCode]) as number;
 
@@ -47,6 +47,10 @@ export function Home() {
   React.useEffect(() => {
     if (faultValue && faultValue > 0) setShowFaultAlert(true);
   }, [faultValue]);
+  React.useEffect(() => {
+    // 隐藏右上角胶囊按钮（... 与 X）
+    hideMenuButton();
+  }, []);
 
   // UI<->Business mapping (humidity 30~80)
   const mapRange = (ui: number) => {
@@ -61,46 +65,25 @@ export function Home() {
     return Math.round(y);
   };
 
-  // Theme by humidity
+  // 固定主题为白底+橙色，匹配设计图
   const getTheme = () => {
     if (!powerSwitch) {
       return {
-        pageBg: 'linear-gradient(135deg, #9EA3AA 0%, #C1C5CB 100%)',
+        pageBg: '#ffffff',
         ringBg: [
-          { offset: 0, color: 'rgba(200,200,200,0.6)' },
-          { offset: 1, color: 'rgba(200,200,200,0.6)' },
+          { offset: 0, color: 'rgba(220,220,220,0.6)' },
+          { offset: 1, color: 'rgba(220,220,220,0.6)' },
         ],
-        main: '#9EA3AA',
-      };
-    }
-    const h = Number(roomHum) || 0;
-    if (h <= 44) {
-      return {
-        pageBg: 'linear-gradient(135deg, #FF9F43 0%, #FF6F00 100%)',
-        ringBg: [
-          { offset: 0, color: 'rgba(255, 210, 150, 0.56)' },
-          { offset: 1, color: 'rgba(255, 210, 150, 0.56)' },
-        ],
-        main: '#FF6F00',
-      };
-    }
-    if (h <= 65) {
-      return {
-        pageBg: 'linear-gradient(135deg, #2ECC71 0%, #27AE60 100%)',
-        ringBg: [
-          { offset: 0, color: 'rgba(180, 235, 200, 0.56)' },
-          { offset: 1, color: 'rgba(180, 235, 200, 0.56)' },
-        ],
-        main: '#27AE60',
+        main: '#C1C5CB',
       };
     }
     return {
-      pageBg: 'linear-gradient(135deg, #3498DB 0%, #2E86C1 100%)',
+      pageBg: '#ffffff',
       ringBg: [
-        { offset: 0, color: 'rgba(200, 225, 255, 0.56)' },
-        { offset: 1, color: 'rgba(200, 225, 255, 0.56)' },
+        { offset: 0, color: 'rgba(243, 124, 28, 0.56)' },
+        { offset: 1, color: 'rgba(217, 217, 217, 0.56)' },
       ],
-      main: '#2E86C1',
+      main: '#F37C1C',
     };
   };
   const theme = getTheme();
@@ -148,8 +131,10 @@ export function Home() {
   return (
     <View className={styles.page} style={{ paddingBottom: `${tabHeight}rpx`, background: theme.pageBg }}>
       <TopBar
-        title={(devInfo as any)?.name || (devInfo as any)?.productName || ''}
+        title={(devInfo as any)?.name || 'Dehumidifier'}
         onEdit={() => setShowNameDialog(true)}
+        onPower={handlePowerToggle}
+        powerOn={powerSwitch}
       />
 
       {/* Fault Alert */}
@@ -171,9 +156,7 @@ export function Home() {
         selected={(windspeed as any) || ''}
         statusBarHeight={statusBarHeight}
         onClose={() => setShowSpeedPopup(false)}
-        onSelect={val => {
-          if (!powerSwitch) return;
-          actions[windspeedCode].set(val);
+        onSelect={val => { if (!powerSwitch) return; actions[windspeedCode].set(val);
           setShowSpeedPopup(false);
         }}
       />
@@ -224,8 +207,10 @@ export function Home() {
                 <Text className={styles.targetTempValue}>{humValue}</Text>
                 <Text className={styles.targetTempTips}>%</Text>
               </View>
-              <Text className={styles.targetTempLabel}>Humidity</Text>
-              <Text className={styles.currentTempValue}>{roomHum || 0}%</Text>
+              <Text className={styles.targetTempLabel}>Humidity {humValue}%</Text>
+              <View className={styles.dropIcon}>
+                <Text style={{ fontSize: 40, color: '#F37C1C' }}>💧</Text>
+              </View>
             </View>
           </View>
           <View className={styles.tempControls}>
@@ -246,6 +231,20 @@ export function Home() {
         </Text>
       </View>
 
+      {/* SPEED Bar */}
+      <View className={styles.speedBar}>
+        <View className={styles.speedHeader}><Text>SPEED</Text></View>
+        <View className={styles.speedOptions}>
+          <View className={`${styles.speedOpt} ${windspeed === 2 ? styles.speedOptActive : ''}`} onClick={() => powerSwitch && actions[windspeedCode].set(2)}>
+            <Text>Low</Text>
+          </View>
+          <View className={styles.speedDivider} />
+          <View className={`${styles.speedOpt} ${windspeed === 3 ? styles.speedOptActive : ''}`} onClick={() => powerSwitch && actions[windspeedCode].set(3)}>
+            <Text>High</Text>
+          </View>
+        </View>
+      </View>
+
       {/* Bottom Navigation */}
       <View className={styles.tabWrap} style={{ height: `${tabHeight}rpx` }}>
         <Image src={Res.bottomBg} className={styles.bottomBg} />
@@ -259,16 +258,10 @@ export function Home() {
                 handleSetting(index);
               }}
             >
-              <Image src={item.img} className={`${styles.tabItem} ${index === 1 ? styles.tabCenter : ''}`} />
+              <Image src={item.img} className={`${styles.tabItem} ${((index===0 && showSpeedPopup) || (index===1 && !!swing) || (index===2 && !powerSwitch)) ? styles.tabItemActive : ""} ${(!powerSwitch && index!==2) ? styles.tabItemDisabled : ""} ${index === 1 ? styles.tabCenter : ""}`} />
             </View>
           ))}
-          {/* power button as floating circle */}
-          <View
-            className={`${styles.powerButton} ${powerSwitch ? styles.powerButtonOn : ''}`}
-            onClick={handlePowerToggle}
-          >
-            <Text className={styles.powerIcon}>⏻</Text>
-          </View>
+          {/* 移除底部浮动电源按钮，电源位于顶部栏 */}
         </View>
         <View className={styles.statusBar} style={{ height: `${statusBarHeight}px` }} />
       </View>
@@ -279,3 +272,6 @@ export function Home() {
 }
 
 export default Home;
+
+
+

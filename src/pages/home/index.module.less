@@ -4,7 +4,7 @@
   width: 100%;
   height: 100vh;
   position: relative;
-  background: linear-gradient(135deg, #280A64 0%, #43179C 100%);
+  background: #ffffff; /* 设计图为白底 */
 }
 
 .iconWrap {
@@ -50,8 +50,8 @@
 .faultText {
   max-width: 542rpx;
   display: flex;
-  white-space: normal;    // 允许换行
-  word-break: break-word; // 遇到长单词/长字符串也能断行
+  white-space: normal;    // 鍏佽鎹㈣
+  word-break: break-word; // 閬囧埌闀垮崟璇?闀垮瓧绗︿覆涔熻兘鏂
   color: #333;
   font-size: 28rpx;
   flex: 1;
@@ -111,7 +111,7 @@
   height: 576rpx;
   border-radius: 500rpx;
   margin-bottom: 80rpx;
-  background: linear-gradient(180deg, rgba(82, 161, 244, 1) 0%, rgba(138, 38, 248, 1) 100%);
+  background: #ffffff; /* 内圈白色 */
 }
 
 .textBox {
@@ -144,8 +144,8 @@
 }
 
 .targetTempValue {
-  color: #fff;
-  font-size: 88rpx;
+  color: #F37C1C; /* 橙色数值 */
+  font-size: 120rpx;
   font-weight: 600;
 }
 
@@ -157,24 +157,29 @@
 
 .targetTempTips {
   display: block;
-  margin-top: 8rpx;
-  color: #fff;
+  margin-top: 16rpx;
+  color: #F37C1C;
   font-size: 48rpx;
   font-weight: 600;
 }
 
 .targetTempLabel {
-  line-height: 42rpx;
-  color: #ffffff;
-  font-size: 32rpx;
-  display: block;
-  margin-bottom: 8rpx;
+  margin-top: 16rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx 20rpx;
+  border: 2rpx solid #F37C1C;
+  border-radius: 24rpx;
+  color: #F37C1C;
+  font-size: 28rpx;
+  background: #ffffff;
 }
 
-.currentTempValue {
-  line-height: 42rpx;
-  color: #ffffff;
-  font-size: 32rpx;
+.currentTempValue { display: none; }
+
+.dropIcon {
+  margin-top: 16rpx;
 }
 
 .tempControls {
@@ -193,11 +198,11 @@
   height: 88rpx;
   margin-bottom: 25rpx;
   border-radius: 88rpx;
-  background: rgba(209, 212, 240, 0.56);
+  background: #F37C1C;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3rpx solid #9e91c9;
+  box-shadow: 0 8rpx 20rpx rgba(243, 124, 28, 0.3);
   transition: all 0.2s ease;
 }
 
@@ -221,8 +226,8 @@
 }
 
 .modeText {
-  color: #fff;
-  font-size: 46rpx;
+  color: #F37C1C;
+  font-size: 36rpx;
   font-weight: 600;
 }
 
@@ -285,26 +290,15 @@
 }
 
 .powerButton {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 60rpx;
-  background: #8A2BE2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 8rpx 24rpx rgba(138, 43, 226, 0.3);
+  display: none;
 }
 
 .powerButtonOn {
-  background: #00C851;
-  box-shadow: 0 8rpx 24rpx rgba(0, 200, 81, 0.3);
+  display: none;
 }
 
 .powerIcon {
-  width: 48rpx;
-  height: 48rpx;
-  filter: brightness(0) invert(1);
+  display: none;
 }
 
 .tabText {
@@ -334,4 +328,54 @@
   height: 237rpx;
   z-index: -1;
   bottom: 10rpx;
+}
+.tabItemActive {
+  filter: brightness(1) saturate(1.2);
+}
+.tabItemDisabled {
+  filter: grayscale(1) opacity(0.5);
+}
+
+/* SPEED Bar */
+.speedBar {
+  width: 100%;
+  background: #ffffff;
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+  box-shadow: 0 -6rpx 16rpx rgba(0,0,0,0.06);
+  padding: 16rpx 24rpx 8rpx;
+}
+.speedHeader {
+  width: 100%;
+  height: 40rpx;
+  background: #F37C1C;
+  color: #fff;
+  font-size: 26rpx;
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.speedOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 24rpx 0;
+}
+.speedOpt {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: #333;
+  font-size: 28rpx;
+}
+.speedOptActive {
+  color: #F37C1C;
+  font-weight: 600;
+}
+.speedDivider {
+  width: 2rpx;
+  height: 72rpx;
+  background: #eaeaea;
 }

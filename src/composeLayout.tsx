@@ -29,18 +29,17 @@ const composeLayout = (SubComp: React.ComponentType<any>) => {
 
       dispatch(initializeSystemInfo(systemInfo));
       dispatch(updateThemeType(theme));
+
+      // 隐藏右上角胶囊按钮（… 和 X），全局生效
+      try {
+        hideMenuButton();
+      } catch (err) {
+        console.warn('隐藏菜单按钮失败', err);
+      }
     }
 
     render() {
       const { extraInfo } = this.props;
-      // hideMenuButton({
-      //   success: () => {
-      //     console.log('隐藏菜单按钮成功');
-      //   },
-      //   fail: err => {
-      //     console.warn('隐藏菜单按钮失败', err);
-      //   },
-      // });
       return (
         <Provider store={store}>
           {/* @ts-ignore */}

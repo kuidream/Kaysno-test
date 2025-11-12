@@ -5,15 +5,15 @@ import styles from './index.module.less';
 
 interface SpeedPopupProps {
   visible: boolean;
-  selected: string;
+  selected: number;
   statusBarHeight: number;
   onClose: () => void;
-  onSelect: (val: string) => void;
+  onSelect: (val: number) => void;
 }
 
 const options = [
-  { value: 'low', label: 'Low' },
-  { value: 'high', label: 'High' },
+  { value: 2, label: 'Low' },
+  { value: 3, label: 'High' },
 ];
 
 export default function SpeedPopup({ visible, selected, statusBarHeight, onClose, onSelect }: SpeedPopupProps) {
@@ -28,7 +28,7 @@ export default function SpeedPopup({ visible, selected, statusBarHeight, onClose
       <View className={styles.popup} style={{ marginBottom: `${statusBarHeight / 2}rpx` }}>
         {options.map((opt, index) => (
           <React.Fragment key={opt.value}>
-            <View className={`${styles.item} ${selected === opt.value ? styles.active : ''}`} onClick={() => onSelect(opt.value)}>
+            <View className={`${styles.item} ${selected === (opt as any).value ? styles.active : ''}`} onClick={() => onSelect((opt as any).value)}>
               <Text>{opt.label}</Text>
             </View>
             {index !== options.length - 1 && <View className={styles.divider} />}
@@ -38,3 +38,5 @@ export default function SpeedPopup({ visible, selected, statusBarHeight, onClose
     </Popup>
   );
 }
+
+
