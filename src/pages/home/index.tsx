@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React from 'react';
 import { View, Text, Image, navigateTo, usePageEvent, showToast, getDevInfo } from '@ray-js/ray';
 import RayCircleProgress from '@ray-js/circle-progress';
 import { useActions, useDevice, useProps } from '@ray-js/panel-sdk';
@@ -6,282 +6,207 @@ import { Dialog, DialogInstance } from '@ray-js/smart-ui';
 import Res from '@/res';
 import Strings from '@/i18n';
 import dpCodes from '@/config/dpCodes';
-// import { useSystemInfo } from '@/hooks/useSystemInfo';
 import { selectSystemInfoByKey } from '@/redux/modules/systemInfoSlice';
 import { useSelector } from 'react-redux';
-import { ModePopup, TopBar } from '@/components';
+import { TopBar } from '@/components';
+import SpeedPopup from '@/components/SpeedPopup';
+import SwingPopup from '@/components/SwingPopup';
+import DialogName from '@/components/DialogName';
 import { getFaultStrings, schema2Dpcodes } from '@/utils';
 import styles from './index.module.less';
+import * as ty from '@ray-js/api';
 
-const { switchCode, modeCode, tempCurrentCode, tempSetCode, faultCode, disinfectStateCode } =
-  dpCodes;
+const { powerCode, humidityCode, getHumCode, windspeedCode, swingCode, faultCode } = dpCodes as any;
 
 export function Home() {
-  // const systemInfo = useSystemInfo();
   const devInfo = useDevice(d => d.devInfo);
   const actions = useActions();
   const statusBarHeight = useSelector(selectSystemInfoByKey('statusBarHeight'));
-  // Air heater DP values
-  const powerSwitch = useProps(props => props[switchCode]) as boolean;
-  const disinfectState = useProps(props => props[disinfectStateCode]) as boolean;
-  const mode = useProps(props => props[modeCode]) as string;
-  const currentTemp = useProps(props => props[tempCurrentCode]) as number;
-  const targetTemp = useProps(props => props[tempSetCode]) as number;
+
+  // DP values
+  const powerSwitch = useProps(props => props[powerCode]) as boolean;
+  const roomHum = useProps(props => props[getHumCode]) as number; // 0-99
+  const targetHum = useProps(props => props[humidityCode]) as number; // 30-80
+  const windspeed = useProps(props => props[windspeedCode]) as string;
+  const swing = useProps(props => props[swingCode]) as boolean;
   const faultValue = useProps(props => props[faultCode]) as number;
 
   // Local state
-  const [tempValue, setTempValue] = React.useState(targetTemp || 50);
+  const [humValue, setHumValue] = React.useState(targetHum ?? 50);
   const [showFaultAlert, setShowFaultAlert] = React.useState(false);
-  const [isDragging, setIsDragging] = React.useState(false);
-  const fault = useProps(props => props[faultCode]);
   const faultSchema = devInfo?.schema.find(data => data?.code === faultCode);
-  const tabHeight = 184; // Fixed height, removed isIphoneX check
+  const tabHeight = 184;
+
+  const [showSpeedPopup, setShowSpeedPopup] = React.useState(false);
+  const [showSwingPopup, setShowSwingPopup] = React.useState(false);
+  const [showNameDialog, setShowNameDialog] = React.useState(false);
 
   usePageEvent('onShow', () => faultValue > 0 && setShowFaultAlert(true));
 
+  React.useEffect(() => setHumValue(targetHum), [targetHum]);
   React.useEffect(() => {
-    setTempValue(targetTemp);
-  }, [targetTemp]);
-
-  React.useEffect(() => {
-    // Show fault alert if there's a fault
-    if (faultValue && faultValue > 0) {
-      setShowFaultAlert(true);
-    }
+    if (faultValue && faultValue > 0) setShowFaultAlert(true);
   }, [faultValue]);
 
-  // UI值 -> 业务值 (RayCircleProgress 原始值 → 温度)
-  const mapRange = (x: number) => {
-    const a = 1;
-    const b = 100;
-    const c = 38;
-    const d = 75;
-    const y = c + ((x - a) * (d - c)) / (b - a);
-    return Math.round(y); // 保证业务值整数
+  // UI<->Business mapping (humidity 30~80)
+  const mapRange = (ui: number) => {
+    const y = 30 + ((ui - 1) * (80 - 30)) / (100 - 1);
+    // step 5
+    const stepped = Math.round(y / 5) * 5;
+    return Math.max(30, Math.min(80, stepped));
+  };
+  const mapToRange = (biz: number) => {
+    const b = Math.max(30, Math.min(80, biz));
+    const y = ((b - 30) * (100 - 1)) / (80 - 30) + 1;
+    return Math.round(y);
   };
 
-  // 业务值 -> UI值 (温度 → RayCircleProgress 的1~100)
-  const mapToRange = (x: number) => {
-    const minX = 38;
-    const maxX = 75;
-    const minY = 1;
-    const maxY = 100;
-    const y = ((x - minX) * (maxY - minY)) / (maxX - minX) + minY;
-    return Math.round(y); // ✅ 这里必须 round，避免 UI ↔ 业务不对称
-  };
-
-  const handlePowerToggle = () => {
-    actions[switchCode].set(!powerSwitch);
-  };
-
-  const handleHotToggle = () => {
-    if (!powerSwitch) return;
-    actions[disinfectStateCode].set(!disinfectState);
-  };
-
-  const handleTempIncrease = () => {
-    if (!powerSwitch) return;
-    const newValue = Math.min(targetTemp + 1, 75);
-    actions[tempSetCode].set(newValue);
-  };
-
-  const handleTempDecrease = () => {
-    if (!powerSwitch) return;
-    const newValue = Math.max(targetTemp - 1, 38);
-    actions[tempSetCode].set(newValue);
-  };
-
-  const [showModePopup, setShowModePopup] = React.useState(false);
-  const [selectedMode, setSelectedMode] = React.useState(mode || 'RAPID');
-
-  React.useEffect(() => {
-    if (mode) {
-      setSelectedMode(mode);
+  // Theme by humidity
+  const getTheme = () => {
+    if (!powerSwitch) {
+      return {
+        pageBg: 'linear-gradient(135deg, #9EA3AA 0%, #C1C5CB 100%)',
+        ringBg: [
+          { offset: 0, color: 'rgba(200,200,200,0.6)' },
+          { offset: 1, color: 'rgba(200,200,200,0.6)' },
+        ],
+        main: '#9EA3AA',
+      };
     }
-  }, [mode]);
-
-  const handleModeSelection = () => {
-    setShowModePopup(true);
+    const h = Number(roomHum) || 0;
+    if (h <= 44) {
+      return {
+        pageBg: 'linear-gradient(135deg, #FF9F43 0%, #FF6F00 100%)',
+        ringBg: [
+          { offset: 0, color: 'rgba(255, 210, 150, 0.56)' },
+          { offset: 1, color: 'rgba(255, 210, 150, 0.56)' },
+        ],
+        main: '#FF6F00',
+      };
+    }
+    if (h <= 65) {
+      return {
+        pageBg: 'linear-gradient(135deg, #2ECC71 0%, #27AE60 100%)',
+        ringBg: [
+          { offset: 0, color: 'rgba(180, 235, 200, 0.56)' },
+          { offset: 1, color: 'rgba(180, 235, 200, 0.56)' },
+        ],
+        main: '#27AE60',
+      };
+    }
+    return {
+      pageBg: 'linear-gradient(135deg, #3498DB 0%, #2E86C1 100%)',
+      ringBg: [
+        { offset: 0, color: 'rgba(200, 225, 255, 0.56)' },
+        { offset: 1, color: 'rgba(200, 225, 255, 0.56)' },
+      ],
+      main: '#2E86C1',
+    };
   };
+  const theme = getTheme();
 
-  const handleModeSelect = (val: string) => {
+  const handlePowerToggle = () => actions[powerCode].set(!powerSwitch);
+  const handleHumIncrease = () => {
     if (!powerSwitch) return;
-    setSelectedMode(val);
-    actions[modeCode].set(val);
-    setShowModePopup(false);
+    const newValue = Math.min((targetHum || 30) + 5, 80);
+    actions[humidityCode].set(newValue);
+  };
+  const handleHumDecrease = () => {
+    if (!powerSwitch) return;
+    const newValue = Math.max((targetHum || 30) - 5, 30);
+    actions[humidityCode].set(newValue);
   };
 
-  const handleFaultAlertClose = () => {
-    setShowFaultAlert(false);
-  };
+  // Circle interactions
+  const handleMove = (v: number) => setHumValue(mapRange(v));
+  const handleEnd = (v: number) => actions[humidityCode].set(mapRange(v));
 
-  const handleSetting = index => {
-    if (index === 0) handleModeSelection();
-    if (index === 1) handlePowerToggle();
-    if (index === 2) handleHotToggle();
-    if (index === 3) navigateTo({ url: '/pages/setting/index' });
+  const handleSetting = (index: number) => {
+    if (index === 0) return setShowSpeedPopup(true);
+    if (index === 1) return setShowSwingPopup(true);
+    if (index === 2) return navigateTo({ url: '/pages/timer/index' });
+    if (index === 3) return navigateTo({ url: '/pages/setting/index' });
   };
 
   const tabs = [
-    {
-      key: 0,
-      img: Res.modeIcon,
-    },
-    {
-      key: 1,
-      img: Res.swIcon,
-    },
-    {
-      key: 2,
-      img: Res.hotIcon,
-    },
-    {
-      key: 3,
-      img: Res.settingIcon,
-    },
+    { key: 0, img: Res.modeIcon }, // SPEED
+    { key: 1, img: Res.swIcon },   // SWING
+    { key: 2, img: Res.tab_timer },
+    { key: 3, img: Res.settingIcon },
   ];
 
-  // 打印dp
-  useEffect(() => {
-    setTimeout(() => {
-      const devInfo = getDevInfo();
-      console.log(schema2Dpcodes(devInfo?.schema));
-    }, 1500);
-  }, []);
-
-  const handleMove = (v: number) => {
-    // console.warn('handleMove', v);
-    setTempValue(mapRange(v));
-  };
-
-  const handleEnd = (v: number) => {
-    // actions[tempSetCode].set(v);
-    const temp = mapRange(v);
-    actions[tempSetCode].set(temp);
-  };
-
-  const handleTempValueClick = () => {
-    const dialogValue = targetTemp ?? tempValue ?? 50;
-    DialogInstance.input({
-      selector: '#temp-setting-dialog',
-      title: Strings.getLang('set_temp_title'),
-      placeholder: Strings.getLang('set_temp_placeholder'),
-      cancelButtonText: Strings.getLang('cancel'),
-      confirmButtonText: Strings.getLang('dsc_ok'),
-      value: String(dialogValue),
-      type: 'digit',
-      beforeClose: (action, value) =>
-        new Promise<boolean>(resolve => {
-          if (action === 'confirm') {
-            const parsedValue = Number(value);
-            if (Number.isNaN(parsedValue)) {
-              showToast({
-                title: Strings.getLang('set_temp_invalid'),
-                icon: 'none',
-              });
-              resolve(false);
-              return;
-            }
-
-            if (parsedValue < 38 || parsedValue > 75) {
-              showToast({
-                title: Strings.getLang('set_temp_range'),
-                icon: 'none',
-              });
-              resolve(false);
-              return;
-            }
-
-            const finalValue = Math.round(parsedValue);
-            setTempValue(finalValue);
-            actions[tempSetCode].set(finalValue);
-          }
-
-          resolve(true);
-        }),
-    }).catch(() => undefined);
+  // Edit device name
+  const handleRename = async (name: string) => {
+    try {
+      await ty.device.renameDeviceName({ deviceId: (devInfo as any)?.devId, name });
+    } catch (e) {
+      showToast({ title: 'Rename failed', icon: 'none' });
+    }
+    setShowNameDialog(false);
   };
 
   return (
-    <View className={styles.page} style={{ paddingBottom: `${tabHeight}rpx` }}>
-      <TopBar title={(devInfo as any)?.name || (devInfo as any)?.productName || ''} />
+    <View className={styles.page} style={{ paddingBottom: `${tabHeight}rpx`, background: theme.pageBg }}>
+      <TopBar
+        title={(devInfo as any)?.name || (devInfo as any)?.productName || ''}
+        onEdit={() => setShowNameDialog(true)}
+      />
 
-      {/* Fault Alert Popup */}
-      {showFaultAlert && fault !== 0 && (
+      {/* Fault Alert */}
+      {showFaultAlert && faultValue !== 0 && (
         <View className={styles.faultAlert}>
           <View className={styles.faultAlertContent}>
             <Image src={Res.faultIcon} className={styles.faultIcon2} />
             <Text className={styles.faultText}>
-              {getFaultStrings(faultSchema?.property?.label, faultCode, fault)}
+              {getFaultStrings(faultSchema?.property?.label, faultCode, faultValue)}
             </Text>
-            <Image
-              src={Res.closeFault}
-              onClick={handleFaultAlertClose}
-              className={styles.faultIcon}
-            />
+            <Image src={Res.closeFault} onClick={() => setShowFaultAlert(false)} className={styles.faultIcon} />
           </View>
         </View>
       )}
 
-      <ModePopup
-        visible={showModePopup}
-        selectedMode={selectedMode}
+      {/* Popups */}
+      <SpeedPopup
+        visible={showSpeedPopup}
+        selected={(windspeed as any) || ''}
         statusBarHeight={statusBarHeight}
-        onClose={() => setShowModePopup(false)}
-        onSelect={handleModeSelect}
+        onClose={() => setShowSpeedPopup(false)}
+        onSelect={val => {
+          if (!powerSwitch) return;
+          actions[windspeedCode].set(val);
+          setShowSpeedPopup(false);
+        }}
+      />
+      <SwingPopup
+        visible={showSwingPopup}
+        selected={!!swing}
+        statusBarHeight={statusBarHeight}
+        onClose={() => setShowSwingPopup(false)}
+        onSelect={val => {
+          if (!powerSwitch) return;
+          actions[swingCode].set(val);
+          setShowSwingPopup(false);
+        }}
       />
 
-      {/* Temperature Control Arc */}
+      {/* Name dialog */}
+      {showNameDialog && (
+        <DialogName
+          show={showNameDialog}
+          defaultValue={(devInfo as any)?.name || ''}
+          onCancel={() => setShowNameDialog(false)}
+          onConfirm={handleRename}
+          maxLength={30}
+          placeholder={'Name Your Unit'}
+        />
+      )}
+
+      {/* Humidity Control */}
       <View className={styles.tempControlContainer}>
         <View className={styles.tempCircle}>
-          {/* <svg
-            width="300"
-            height="300"
-            viewBox="0 0 300 300"
-            className={styles.tempSvg}
-            onTouchStart={e => {
-              setIsDragging(true);
-              handleArcTouch(e);
-            }}
-            onTouchMove={e => {
-              if (isDragging) {
-                handleArcTouch(e);
-              }
-            }}
-            onTouchEnd={handleArcTouchEnd}
-          >
-            {/* Background arc */}
-          {/* <path
-              d="M 43.4 256.6 A 120 120 0 1 1 256.6 256.6"
-              fill="none"
-              stroke="rgba(255,255,255,0.2)"
-              strokeWidth="8"
-              strokeLinecap="round"
-            />
-            {/* Progress arc */}
-          {/* <path
-              d={`M 43.4 256.6 A 120 120 0 ${
-                temperaturePercent > 50 ? 1 : 0
-              } 1 ${thumbX} ${thumbY}`}
-              fill="none"
-              stroke="#00C9FF"
-              strokeWidth="8"
-              strokeLinecap="round"
-            />
-            {/* Thumb circle */}
-          {/* <circle
-              cx={thumbX}
-              cy={thumbY}
-              r="12"
-              fill="#fff"
-              stroke="#00C9FF"
-              strokeWidth="3"
-              className={styles.tempThumb}
-            />
-          </svg> */}
           <View className={styles.tempCircleContent}>
             <RayCircleProgress
-              value={mapToRange(targetTemp)}
+              value={mapToRange(targetHum || 50)}
               startDegree={140}
               ringRadius={130}
               innerRingRadius={100}
@@ -292,43 +217,33 @@ export function Home() {
               thumbRadius={40}
               thumbBorderWidth={0}
               disable={!powerSwitch}
-              colorList={[
-                { offset: 0, color: 'rgba(209, 212, 240, 0.56)' },
-                { offset: 0.25, color: 'rgba(209, 212, 240, 0.56)' },
-                { offset: 0.5, color: 'rgba(209, 212, 240, 0.56)' },
-                { offset: 1, color: 'rgba(209, 212, 240, 0.56)' },
-              ]}
+              colorList={theme.ringBg}
             />
             <View className={styles.textBox}>
-              <View
-                className={`${styles.tempTopBox} ${styles.tempValueClickArea}`}
-                onClick={e => {
-                  e?.stopPropagation?.();
-                  handleTempValueClick();
-                }}
-              >
-                <Text className={styles.targetTempValue}>{tempValue}</Text>
-                <Text className={styles.targetTempTips}>℃</Text>
+              <View className={`${styles.tempTopBox} ${styles.tempValueClickArea}`}>
+                <Text className={styles.targetTempValue}>{humValue}</Text>
+                <Text className={styles.targetTempTips}>%</Text>
               </View>
-              {/* <Image src={Res.driver} className={styles.driverIcon} /> */}
-              <Text className={styles.targetTempLabel}>{Strings.getLang('tank_temp')}</Text>
-              <Text className={styles.currentTempValue}>{currentTemp}℃</Text>
+              <Text className={styles.targetTempLabel}>Humidity</Text>
+              <Text className={styles.currentTempValue}>{roomHum || 0}%</Text>
             </View>
           </View>
           <View className={styles.tempControls}>
-            <View className={styles.tempBtn} onClick={handleTempDecrease}>
+            <View className={styles.tempBtn} onClick={handleHumDecrease}>
               <Image src={Res.minus} className={styles.addIcon} />
             </View>
-            <View className={styles.tempBtn} onClick={handleTempIncrease}>
+            <View className={styles.tempBtn} onClick={handleHumIncrease}>
               <Image src={Res.add} className={styles.addIcon} />
             </View>
           </View>
         </View>
       </View>
 
-      {/* Mode Display */}
+      {/* Mode/Status line - show power */}
       <View className={styles.modeDisplay}>
-        <Text className={styles.modeText}>{Strings.getDpLang(modeCode, mode)}</Text>
+        <Text className={styles.modeText}>
+          {powerSwitch ? 'On' : 'Off'}
+        </Text>
       </View>
 
       {/* Bottom Navigation */}
@@ -336,19 +251,24 @@ export function Home() {
         <Image src={Res.bottomBg} className={styles.bottomBg} />
         <View className={styles.tabBox}>
           {tabs.map((item, index) => (
-            <View key={item.key} onClick={() => handleSetting(index)}>
-              <Image
-                src={
-                  powerSwitch && index === 1
-                    ? Res.swActive
-                    : index === 2 && disinfectState
-                    ? Res.hotIconAct
-                    : item.img
-                }
-                className={`${styles.tabItem} ${index === 1 ? styles.tabCenter : ''}`}
-              />
+            <View
+              key={item.key}
+              onClick={() => {
+                // Timer (index 2) can be used while off; others disabled when off
+                if (!powerSwitch && index !== 2) return;
+                handleSetting(index);
+              }}
+            >
+              <Image src={item.img} className={`${styles.tabItem} ${index === 1 ? styles.tabCenter : ''}`} />
             </View>
           ))}
+          {/* power button as floating circle */}
+          <View
+            className={`${styles.powerButton} ${powerSwitch ? styles.powerButtonOn : ''}`}
+            onClick={handlePowerToggle}
+          >
+            <Text className={styles.powerIcon}>⏻</Text>
+          </View>
         </View>
         <View className={styles.statusBar} style={{ height: `${statusBarHeight}px` }} />
       </View>
